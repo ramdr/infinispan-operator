@@ -107,7 +107,7 @@ class DataGridServiceIT {
    @Test
    void serviceMonitorTest() throws IOException {
       // Give Prometheus some time to reload the config and make the first scrape
-      Waiters.sleep(TimeUnit.SECONDS, 60);
+      Waiters.sleep(TimeUnit.SECONDS, 200);
 
       // Check ServiceMonitor targets
       OpenShift monitoringShift = OpenShifts.master("openshift-user-workload-monitoring");
