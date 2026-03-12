@@ -131,7 +131,12 @@ class DataGridServiceIT {
             throw new IllegalStateException("Invalid targets: " + targets);
          }
 
-         List<JsonNode> actualList = StreamSupport.stream(activeTargets.spliterator(), false).collect(Collectors.toList());
+         List<JsonNode> actualList = StreamSupport.stream(activeTargets.spliterator(), false)
+            .filter(t -> {
+               JsonNode labels = t.get("discoveredLabels");
+               return labels != null &&
+                      "infinispan-pod".equals(labels.path("__meta_kubernetes_pod_label_app").asText());
+            }).collect(Collectors.toList());
          List<String> targetIPs = actualList.stream().map(t -> t.get("discoveredLabels").get("__meta_kubernetes_pod_ip").asText()).collect(Collectors.toList());
          List<String> targetHealths = actualList.stream().map(t -> t.get("health").asText()).collect(Collectors.toList());
 
